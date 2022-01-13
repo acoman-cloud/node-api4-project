@@ -1,6 +1,6 @@
 // to inject the config vars inside the .env
 require('dotenv').config()
-
+const User = require('./model')
 const users = [
 	{
 		id: 1,
@@ -27,8 +27,12 @@ const users = [
 const express = require('express')
 const app = express()
 
-app.get('/registers', (req, res) => {
-  res.json(users)
+app.post('/registers', async (req, res) => {
+  try{
+		console.log(req.username)
+	} catch (err) {
+		res.status(500).json({ message: err.message })
+	}
 })
 
 app.get('/users', (req, res) => {
