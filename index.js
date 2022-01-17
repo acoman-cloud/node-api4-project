@@ -1,46 +1,43 @@
 // to inject the config vars inside the .env
 require('dotenv').config()
 const User = require('./model')
-const users = [
-	{
-		id: 1,
-		user: 'Sam',
-		password: '1234'
-	},
-	{
-		id: 2,
-		user: 'Lark',
-		password: '1234'
-	},
-	{
-		id: 3,
-		user: 'Reginold',
-		password: '1234'
-	},
-	{
-		id: 4,
-		user: 'user4',
-		password: '1234'
-	}
-]
 
 const express = require('express')
 const app = express()
 
-app.post('/registers', async (req, res) => {
-  try{
-		console.log(req.username)
-	} catch (err) {
-		res.status(500).json({ message: err.message })
-	}
+app.post('/registers', (req, res) => {
+	User.create()
+		.then(ers=>{
+				res.status(200).json(ers)
+			})
+		.catch(err=>{
+			res.status(500).json({message:'internal database problem'})
+		})
 })
 
 app.get('/users', (req, res) => {
-  res.json(users)
+  User.get()
+		.then(use=>{
+			res.json(use)
+		})
+		.catch(err=>{
+			res.status(500).json({message:'internal functional problem'})
+		})
 })
 
+app.delete('/users', (req, res) => {
+  User.remove()
+		.then(use=>{
+			res.json(use)
+		})
+		.catch(err=>{
+			res.status(500).json({message:'internal functional problem'})
+		})
+})
+
+
 app.get('/hello', (req, res) => {
-  res.json({ message: 'hey there'})
+  res.json('hey there')
 })
 
 // heroku wants to set its own port
